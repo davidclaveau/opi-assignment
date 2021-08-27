@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import Sensor from './Sensor'
+import './App.css'
 
 interface Props {
-  
+
+}
+
+interface ISensor {
+  id: number;
+  name: string;
+  type: string;
+  createdAt: string;
+  units: string
 }
 
 function api<T>(url: string): Promise<T> {
@@ -16,7 +26,13 @@ function api<T>(url: string): Promise<T> {
 
 const Dashboard = (props: Props) => {
   const [readings, setReadings] = useState([{}])
-  const [sensors, setSensors] = useState([{}])
+  const [sensors, setSensors] = useState([{
+    id: 0,
+    name: "",
+    type: "",
+    createdAt: "",
+    units: ""
+  }])
 
   useEffect(() => {
     // Fetch request for readings
@@ -29,7 +45,7 @@ const Dashboard = (props: Props) => {
       })
 
     // Fetch request for sensors
-    api<[{id: number; name: string; type: string; createdAt: Date; units: string}]>('api/v1/sensors.json')
+    api<[{id: number; name: string; type: string; createdAt: string; units: string}]>('api/v1/sensors.json')
       .then((response) => {
         setSensors(response)
       })
@@ -38,9 +54,36 @@ const Dashboard = (props: Props) => {
       })
     }, [])
 
+    const sensorMap = sensors.map(sensor => {
+      return (
+        <Sensor
+          key={sensor.id}
+          name={sensor.name}
+          type={sensor.type}
+          createdAt={sensor.createdAt}
+          units={sensor.units}
+        />
+      );
+    })
+
   return (
     <div>
-      This is where the dashboard is rendered.
+      Current Readings
+
+      <br></br>
+      <br></br>
+
+      <table className="tableClass">
+        <tbody>
+          <tr>
+            <th>Sensor Name</th>
+            <th>Sensor Type</th>
+            <th>Units</th>
+          </tr>
+            {sensorMap}
+        </tbody>
+      </table>
+
     </div>
   )
 }
