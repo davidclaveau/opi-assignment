@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Sensor from './Sensor'
-import './App.css'
+import Units from './Units'
+import './Dashboard.css'
 
 interface Props {
 
@@ -71,10 +72,9 @@ const Dashboard = (props: Props) => {
     
   return (
     <div>
-      Current Readings
+      <h1>Current Readings</h1>
 
-      <br></br>
-      <br></br>
+      <Units />
 
       <table className="tableClass">
         <tbody>
