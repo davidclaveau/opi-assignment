@@ -5,7 +5,8 @@ interface Props {
   name: string;
   type: string;
   createdAt: string;
-  units: string
+  units: string;
+  temperature: any;
 }
 
 const Sensor = (props: Props) => {
@@ -14,6 +15,7 @@ const Sensor = (props: Props) => {
       <td>{props.name}</td>
       <td>{props.type}</td>
       <td>{props.units}</td>
+      <td>{props.temperature}</td>
     </tr>
   )
 }

@@ -6,14 +6,6 @@ interface Props {
 
 }
 
-interface ISensor {
-  id: number;
-  name: string;
-  type: string;
-  createdAt: string;
-  units: string
-}
-
 function api<T>(url: string): Promise<T> {
   return fetch(url)
     .then(response => {
@@ -25,13 +17,23 @@ function api<T>(url: string): Promise<T> {
 }
 
 const Dashboard = (props: Props) => {
-  const [readings, setReadings] = useState([{}])
+  const [loading, setLoading]  = useState(true)
+  const [readings, setReadings] = useState([{
+    time: "",
+    sensorId: 0,
+    value: 0
+  }])
   const [sensors, setSensors] = useState([{
     id: 0,
     name: "",
     type: "",
     createdAt: "",
-    units: ""
+    units: "",
+    temperatures: {
+      time: "",
+      sensorId: 0,
+      value: 0,
+    }
   }])
 
   useEffect(() => {
@@ -45,26 +47,36 @@ const Dashboard = (props: Props) => {
       })
 
     // Fetch request for sensors
-    api<[{id: number; name: string; type: string; createdAt: string; units: string}]>('api/v1/sensors.json')
+    api<[{id: number; name: string; type: string; createdAt: string; units: string; temperatures: {time: string; sensorId: number; value: number}}]>('api/v1/sensors.json')
       .then((response) => {
         setSensors(response)
+        setLoading(false)
       })
       .catch(error => {
         console.log(error)
       })
     }, [])
 
-    const sensorMap = sensors.map(sensor => {
-      return (
-        <Sensor
-          key={sensor.id}
-          name={sensor.name}
-          type={sensor.type}
-          createdAt={sensor.createdAt}
-          units={sensor.units}
-        />
-      );
-    })
+    // Get readings for specific sensor, providing the most recent readings
+    const getHottest = (specificId:number) => {
+      console.log("id", specificId)
+
+      const temperatures = readings.filter(reading => reading.sensorId === specificId )
+      console.log("temperatures", temperatures)
+
+      // Find most recent temperature
+      const hottestTemp = temperatures.sort((a, b) => new Date(a.time) > new Date(b.time) ? -1 : new Date(a.time) < new Date(b.time) ? 1 : 0)
+      console.log("hottestTemp", hottestTemp)
+      
+      return hottestTemp.length > 0 ? hottestTemp[0].value : "No readings";
+    }
+    
+    // Converting string date to UTC human-readable
+    // const newDate1 = new Date("2020-01-01T00:03Z")
+    // newDate1.toUTCString()
+    
+
+    console.log("loading", loading)
 
   return (
     <div>
@@ -79,8 +91,20 @@ const Dashboard = (props: Props) => {
             <th>Sensor Name</th>
             <th>Sensor Type</th>
             <th>Units</th>
+            <th>Temperature</th>
           </tr>
-            {sensorMap}
+            {!loading && sensors.map(sensor => {
+              return (
+                <Sensor
+                  key={sensor.id}
+                  name={sensor.name}
+                  type={sensor.type}
+                  createdAt={sensor.createdAt}
+                  units={sensor.units}
+                  temperature={getHottest(sensor.id)}
+                />
+              );
+            })}
         </tbody>
       </table>
 
