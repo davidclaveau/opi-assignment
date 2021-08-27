@@ -38,35 +38,29 @@ const Dashboard = (props: Props) => {
 
   useEffect(() => {
     // Fetch request for readings
-    api<[{time:string; sensorId: number; value: number}]>('api/v1/readings.json')
-      .then((response) => {
-        setReadings(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    const readingsPromise = api<[{time:string; sensorId: number; value: number}]>('api/v1/readings.json')
 
     // Fetch request for sensors
-    api<[{id: number; name: string; type: string; createdAt: string; units: string; temperatures: {time: string; sensorId: number; value: number}}]>('api/v1/sensors.json')
-      .then((response) => {
-        setSensors(response)
-        setLoading(false)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    const sensorsPromise = api<[{id: number; name: string; type: string; createdAt: string; units: string; temperatures: {time: string; sensorId: number; value: number}}]>('api/v1/sensors.json')
+
+    Promise.all([
+      Promise.resolve(readingsPromise),
+      Promise.resolve(sensorsPromise)
+    ]).then(all => {
+      setReadings(all[0])
+      setSensors(all[1])
+    }).then(() => {
+      setLoading(false)
+    })
+
     }, [])
 
     // Get readings for specific sensor, providing the most recent readings
     const getHottest = (specificId:number) => {
-      console.log("id", specificId)
-
       const temperatures = readings.filter(reading => reading.sensorId === specificId )
-      console.log("temperatures", temperatures)
 
       // Find most recent temperature
       const hottestTemp = temperatures.sort((a, b) => new Date(a.time) > new Date(b.time) ? -1 : new Date(a.time) < new Date(b.time) ? 1 : 0)
-      console.log("hottestTemp", hottestTemp)
       
       return hottestTemp.length > 0 ? hottestTemp[0].value : "No readings";
     }
@@ -75,9 +69,6 @@ const Dashboard = (props: Props) => {
     // const newDate1 = new Date("2020-01-01T00:03Z")
     // newDate1.toUTCString()
     
-
-    console.log("loading", loading)
-
   return (
     <div>
       Current Readings
@@ -90,7 +81,6 @@ const Dashboard = (props: Props) => {
           <tr>
             <th>Sensor Name</th>
             <th>Sensor Type</th>
-            <th>Units</th>
             <th>Temperature</th>
           </tr>
             {!loading && sensors.map(sensor => {

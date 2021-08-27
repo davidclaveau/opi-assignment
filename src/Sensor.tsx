@@ -10,12 +10,30 @@ interface Props {
 }
 
 const Sensor = (props: Props) => {
+  let unit:string = "";
+
+  switch (props.units) {
+    case "Celsius":
+      unit = " C"
+      break;
+    case "Farenheit":
+      unit = " F"
+      break;
+    case "%":
+      unit = "%"
+      break;
+    default:
+      break;
+  }
+
   return (
     <tr>
       <td>{props.name}</td>
       <td>{props.type}</td>
-      <td>{props.units}</td>
-      <td>{props.temperature}</td>
+      <td>
+        {typeof props.temperature === "number" ? Math.round(props.temperature * 10) / 10 : props.temperature}
+        {props.temperature === "No readings" ? "" : unit}
+      </td>
     </tr>
   )
 }
