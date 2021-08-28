@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import Sensor from './Sensor'
 import Units from './Units'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCouch, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 import './Dashboard.css'
 
 interface Props {
@@ -75,6 +77,17 @@ const Dashboard = (props: Props) => {
       <h1>Current Readings</h1>
 
       <Units />
+
+      <div className="sensors-container">
+        <div className="sensors-livingroom">
+          <div>Living Room</div>
+          <FontAwesomeIcon icon={faCouch} size="6x" color="green" />
+        </div>
+        <div className="sensors-garage">
+          <div>Garage</div>
+          <FontAwesomeIcon icon={faWarehouse} size="6x" color="darkblue" />
+        </div>
+      </div>
 
       <table className="tableClass">
         <tbody>
