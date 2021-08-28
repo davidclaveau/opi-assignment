@@ -5,6 +5,7 @@ import Sensor from './Sensor'
 interface Props {
   room: string;
   image: string;
+  roomSensors: number[];
   sensors: {
     id: number;
     name: string;
@@ -23,7 +24,7 @@ interface Props {
 const SensorIcons = (props: Props) => {
   
   // Get readings for specific sensor, providing the most recent readings
-  const getHottest = (specificId:number) => {
+  const getRecent = (specificId:number) => {
     const temperatures = props.readings.filter(reading => reading.sensorId === specificId )
   
     // Find most recent temperature
@@ -31,34 +32,35 @@ const SensorIcons = (props: Props) => {
     
     return hottestTemp.length > 0 ? hottestTemp[0].value : "No readings";
   }
+  
+  // Find the sensors tied to this room, create new array to render Sensor component
+  const currentSensor = []
+  for (const roomSensor of props.roomSensors) {
+    currentSensor.push(...props.sensors.filter(sensor => sensor.id === roomSensor))
+  }
+
+  console.log("currentSensor", currentSensor)
 
   return (
     <div>
       <div className="room-title">{props.room}</div>
-      <img src={props.image} alt="Avatar" />
-      <table className="tableClass">
-        <tbody>
-          <tr>
-            <th>Sensor Name</th>
-            <th>Sensor Type</th>
-            <th>Temperature</th>
-          </tr>
-            {props.sensors.map(sensor => {
-              return (
-                <Sensor
-                  key={sensor.id}
-                  name={sensor.name}
-                  type={sensor.type}
-                  createdAt={sensor.createdAt}
-                  units={sensor.units}
-                  temperature={getHottest(sensor.id)}
-                />
-              );
-            })}
-        </tbody>
-      </table>
+      <img src={props.image} alt="Avatar" />    
+      <div className="measurement-container">  
+        {currentSensor.map(sensor => {
+          return (
+            <Sensor
+              key={sensor.id}
+              name={sensor.name}
+              type={sensor.type}
+              createdAt={sensor.createdAt}
+              units={sensor.units}
+              temperature={getRecent(sensor.id)}
+            />
+          )
+        })}
+      </div>
     </div>
-  )
+  );
 }
 
 export default SensorIcons

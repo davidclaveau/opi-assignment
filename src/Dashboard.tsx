@@ -23,11 +23,13 @@ const Dashboard = (props: Props) => {
   const [rooms, setRooms] = useState([
     {
       name: "living room",
-      image: "../images/minh-pham-living-room.jpg" 
+      image: "../images/minh-pham-living-room.jpg",
+      roomSensors: [1, 2]
     },
     {
       name: "garage",
-      image: "../images/tyler-nix-garage.jpg" 
+      image: "../images/tyler-nix-garage.jpg",
+      roomSensors: [3, 4] 
     }
   ])
   const [loading, setLoading]  = useState(true)
@@ -72,12 +74,13 @@ const Dashboard = (props: Props) => {
       <h1>Current Readings</h1>
 
       <Units />
-      <div className="sensors-container">\
+      <div className="sensors-container">
         {!loading && rooms.map(room => {
           return (
             <SensorIcons
               room={room.name}
               image={room.image}
+              roomSensors={room.roomSensors}
               sensors={sensors}
               readings={readings}
             />

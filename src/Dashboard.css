@@ -25,7 +25,7 @@ h1 {
   text-align: center;
 }
 
-.sensors-container div {
+.sensors-container {
   margin: 1em;
 }
 
@@ -40,6 +40,25 @@ td {
 
 .room-title {
   text-transform: capitalize;
+  margin: 1em;
+}
+
+.measurement-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 1em;
+}
+
+.measurement-items {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  margin: 1em 2em 1em 2em;
+}
+
+.temperature-padding {
+  padding-left: 8px;
 }
 
 @media only screen and (max-width: 900px) {

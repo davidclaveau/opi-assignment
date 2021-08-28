@@ -1,4 +1,7 @@
 import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTemperatureHigh } from '@fortawesome/free-solid-svg-icons'
+import InvertColorsIcon from '@material-ui/icons/InvertColors';
 
 interface Props {
   key: number;
@@ -27,14 +30,17 @@ const Sensor = (props: Props) => {
   }
 
   return (
-    <tr>
-      <td>{props.name}</td>
-      <td>{props.type}</td>
-      <td>
-        {typeof props.temperature === "number" ? Math.round(props.temperature * 10) / 10 : props.temperature}
-        {props.temperature === "No readings" ? "" : unit}
-      </td>
-    </tr>
+    <div className="measurement-items">
+      {props.type === "Temperature Sensor" && 
+          <FontAwesomeIcon icon={faTemperatureHigh} size='2x' className="temperature-padding"/>
+      }
+      {props.type === "Humidity Sensor" &&
+       <InvertColorsIcon fontSize={'large'}/>
+      }
+      
+      {typeof props.temperature === "number" ? Math.round(props.temperature * 10) / 10 : "None"}
+      {props.temperature === "No readings" ? "" : unit}
+    </div>
   )
 }
 
