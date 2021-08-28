@@ -81,11 +81,11 @@ const Dashboard = (props: Props) => {
       <div className="sensors-container">
         <div className="sensors-livingroom">
           <div>Living Room</div>
-          <FontAwesomeIcon icon={faCouch} size="6x" color="green" />
+          <img src="../images/minh-pham-living-room.jpg" alt="Avatar" />
         </div>
         <div className="sensors-garage">
           <div>Garage</div>
-          <FontAwesomeIcon icon={faWarehouse} size="6x" color="darkblue" />
+          <img src="../images/tyler-nix-garage.jpg" alt="Avatar" />
         </div>
       </div>
 
