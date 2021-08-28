@@ -1,0 +1,69 @@
+img {
+  border-radius: 50%;
+  width: 15em;
+  height: 15em;  
+  border: 10px;
+  border: #303f9f solid 0.3em;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+}
+
+.settings-container {
+  margin: 1em;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sensors-container {
+  margin: 1em;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  text-align: center;
+}
+
+.sensors-container {
+  margin: 1em;
+}
+
+.tableClass {
+  table-layout : fixed;
+  width: 100%;
+}
+
+td {
+  text-align: center;
+}
+
+.room-title {
+  text-transform: capitalize;
+  margin: 1em;
+}
+
+.measurement-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 1em;
+}
+
+.measurement-items {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  margin: 1em 2em 1em 2em;
+}
+
+.temperature-padding {
+  padding-left: 8px;
+}
+
+@media only screen and (max-width: 900px) {
+  img {
+    width: 8em;
+    height: 8em;  
+  }
+}
