@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import Sensor from './Sensor'
 import Units from './Units'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCouch, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import SensorIcons from './SensorIcons'
 import './Dashboard.css'
 
 interface Props {
 
 }
 
+// Function for making a fetch call to public/api/v1
 function api<T>(url: string): Promise<T> {
   return fetch(url)
     .then(response => {
@@ -20,6 +20,16 @@ function api<T>(url: string): Promise<T> {
 }
 
 const Dashboard = (props: Props) => {
+  const [rooms, setRooms] = useState([
+    {
+      name: "living room",
+      image: "../images/minh-pham-living-room.jpg" 
+    },
+    {
+      name: "garage",
+      image: "../images/tyler-nix-garage.jpg" 
+    }
+  ])
   const [loading, setLoading]  = useState(true)
   const [readings, setReadings] = useState([{
     time: "",
@@ -31,12 +41,7 @@ const Dashboard = (props: Props) => {
     name: "",
     type: "",
     createdAt: "",
-    units: "",
-    temperatures: {
-      time: "",
-      sensorId: 0,
-      value: 0,
-    }
+    units: ""
   }])
 
   useEffect(() => {
@@ -44,7 +49,7 @@ const Dashboard = (props: Props) => {
     const readingsPromise = api<[{time:string; sensorId: number; value: number}]>('api/v1/readings.json')
 
     // Fetch request for sensors
-    const sensorsPromise = api<[{id: number; name: string; type: string; createdAt: string; units: string; temperatures: {time: string; sensorId: number; value: number}}]>('api/v1/sensors.json')
+    const sensorsPromise = api<[{id: number; name: string; type: string; createdAt: string; units: string;}]>('api/v1/sensors.json')
 
     Promise.all([
       Promise.resolve(readingsPromise),
@@ -58,16 +63,6 @@ const Dashboard = (props: Props) => {
 
     }, [])
 
-    // Get readings for specific sensor, providing the most recent readings
-    const getHottest = (specificId:number) => {
-      const temperatures = readings.filter(reading => reading.sensorId === specificId )
-
-      // Find most recent temperature
-      const hottestTemp = temperatures.sort((a, b) => new Date(a.time) > new Date(b.time) ? -1 : new Date(a.time) < new Date(b.time) ? 1 : 0)
-      
-      return hottestTemp.length > 0 ? hottestTemp[0].value : "No readings";
-    }
-    
     // Converting string date to UTC human-readable
     // const newDate1 = new Date("2020-01-01T00:03Z")
     // newDate1.toUTCString()
@@ -77,39 +72,18 @@ const Dashboard = (props: Props) => {
       <h1>Current Readings</h1>
 
       <Units />
-
-      <div className="sensors-container">
-        <div className="sensors-livingroom">
-          <div>Living Room</div>
-          <img src="../images/minh-pham-living-room.jpg" alt="Avatar" />
-        </div>
-        <div className="sensors-garage">
-          <div>Garage</div>
-          <img src="../images/tyler-nix-garage.jpg" alt="Avatar" />
-        </div>
+      <div className="sensors-container">\
+        {!loading && rooms.map(room => {
+          return (
+            <SensorIcons
+              room={room.name}
+              image={room.image}
+              sensors={sensors}
+              readings={readings}
+            />
+          )
+        })}
       </div>
-
-      <table className="tableClass">
-        <tbody>
-          <tr>
-            <th>Sensor Name</th>
-            <th>Sensor Type</th>
-            <th>Temperature</th>
-          </tr>
-            {!loading && sensors.map(sensor => {
-              return (
-                <Sensor
-                  key={sensor.id}
-                  name={sensor.name}
-                  type={sensor.type}
-                  createdAt={sensor.createdAt}
-                  units={sensor.units}
-                  temperature={getHottest(sensor.id)}
-                />
-              );
-            })}
-        </tbody>
-      </table>
 
     </div>
   )

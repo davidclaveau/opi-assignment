@@ -38,6 +38,10 @@ td {
   text-align: center;
 }
 
+.room-title {
+  text-transform: capitalize;
+}
+
 @media only screen and (max-width: 900px) {
   img {
     width: 8em;
