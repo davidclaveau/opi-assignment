@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import Sensor from './Sensor'
-import Units from './Units'
-import SensorIcons from './SensorIcons'
-import './Dashboard.css'
+import Units from './Units';
+import SensorIcons from './SensorIcons';
+import Graph from './Graph';
+import Button from '@material-ui/core/Button';
+
+import './Dashboard.css';
 
 interface Props {
 
@@ -33,19 +35,20 @@ const Dashboard = (props: Props) => {
     createdAt: "",
     units: ""
   }])
-  const [rooms, setRooms] = useState([
+  const [rooms] = useState([
     {
-      name: "living room",
+      name: "Living Room",
       image: "../images/minh-pham-living-room.jpg",
       roomSensors: [1, 2]
     },
     {
-      name: "garage",
+      name: "Garage",
       image: "../images/tyler-nix-garage.jpg",
       roomSensors: [3, 4] 
     }
   ])
   const [currentUnit, setCurrentUnit] = useState("celsius")
+  const [data, setData] = useState("")
 
   useEffect(() => {
     // Fetch request for readings
@@ -65,15 +68,9 @@ const Dashboard = (props: Props) => {
     })
 
     }, [])
-
-    // Converting string date to UTC human-readable
-    // const newDate1 = new Date("2020-01-01T00:03Z")
-    // newDate1.toUTCString()
     
   return (
-    <div>
-      <h1>Current Readings</h1>
-
+    <div className="main-container">
       <Units onChange={(unit:string) => setCurrentUnit(unit)}/>
       <div className="sensors-container">
         {!loading && rooms.map(room => {
@@ -86,11 +83,31 @@ const Dashboard = (props: Props) => {
               sensors={sensors}
               readings={readings}
               currentUnit={currentUnit}
+              onChange={(data:string) => {setData(data)}}
             />
           )
         })}
       </div>
-
+      <div className="graph-container">
+        {!loading && data && rooms.filter(room => room.name === data).map(room => {
+          return (
+            <Graph
+              key={room.name}
+              room={room.name}
+              roomSensors={room.roomSensors}
+              data={data}
+              sensors={sensors}
+              readings={readings}
+              currentUnit={currentUnit}
+              />
+              )
+            })}
+        {data && 
+          <div>
+            <Button variant="contained" color="primary" disableElevation onClick={() => setData("")}>Close</Button>
+          </div>
+        }
+      </div>
     </div>
   )
 }
