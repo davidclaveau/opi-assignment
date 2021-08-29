@@ -1,4 +1,5 @@
 import Sensor from './Sensor';
+import { currentSensor } from './utils/currentSensor';
 
 interface Props {
   onChange:any;
@@ -20,8 +21,17 @@ interface Props {
   }[]
 };
 
-const SensorIcons = (props: Props) => {
+interface ISensors {
+  id: number;
+  name: string;
+  type: string;
+  createdAt: string;
+  units: string;
+}
 
+const SensorIcons = (props: Props) => {
+  // Find the sensors tied to this room, create new array to render Sensor component
+  const sensorArray:ISensors[] = currentSensor(props.roomSensors, props.sensors)
   
   // Get readings for specific sensor, providing the most recent readings
   const getRecent = (specificId:number) => {
@@ -33,19 +43,12 @@ const SensorIcons = (props: Props) => {
     return hottestTemp.length > 0 ? hottestTemp[0].value : "No readings";
   }
   
-  // Find the sensors tied to this room, create new array to render Sensor component
-  const currentSensor = []
-  for (const roomSensor of props.roomSensors) {
-    currentSensor.push(...props.sensors.filter(sensor => sensor.id === roomSensor))
-  }
-  console.log("current?", currentSensor);
-  
   return (
     <div>
       <div className="room-title">{props.room}</div>
       <img src={props.image} alt="Avatar" onClick={() => props.onChange(props.room)}/>    
       <div className="measurement-container">  
-        {currentSensor.map(sensor => {
+        {sensorArray.map(sensor => {
           return (
             <Sensor
               key={sensor.id}

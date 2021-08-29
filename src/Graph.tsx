@@ -1,4 +1,6 @@
 import React from 'react'
+import { currentSensor } from './utils/currentSensor';
+
 
 interface Props {
   data: string;
@@ -19,10 +21,19 @@ interface Props {
   }[]
 }
 
-const Graph = (props: Props) => {
+interface ISensors {
+  id: number;
+  name: string;
+  type: string;
+  createdAt: string;
+  units: string;
+}
 
-  console.log("sensors", props.sensors)
-  console.log("readings", props.readings)
+const Graph = (props: Props) => {
+  // Find the sensors tied to this room, create new array to render Sensor component
+  const test:ISensors[] = currentSensor(props.roomSensors, props.sensors)
+
+  console.log("test", test)
 
   return (
     <div>
