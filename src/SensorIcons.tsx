@@ -6,6 +6,7 @@ interface Props {
   room: string;
   image: string;
   roomSensors: number[];
+  currentUnit: string;
   sensors: {
     id: number;
     name: string;
@@ -20,9 +21,7 @@ interface Props {
   }[]
 }
 
-
 const SensorIcons = (props: Props) => {
-  
   // Get readings for specific sensor, providing the most recent readings
   const getRecent = (specificId:number) => {
     const temperatures = props.readings.filter(reading => reading.sensorId === specificId )
@@ -39,8 +38,6 @@ const SensorIcons = (props: Props) => {
     currentSensor.push(...props.sensors.filter(sensor => sensor.id === roomSensor))
   }
 
-  console.log("currentSensor", currentSensor)
-
   return (
     <div>
       <div className="room-title">{props.room}</div>
@@ -55,6 +52,7 @@ const SensorIcons = (props: Props) => {
               createdAt={sensor.createdAt}
               units={sensor.units}
               temperature={getRecent(sensor.id)}
+              currentUnit={props.currentUnit}
             />
           )
         })}

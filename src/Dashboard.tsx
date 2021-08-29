@@ -20,18 +20,6 @@ function api<T>(url: string): Promise<T> {
 }
 
 const Dashboard = (props: Props) => {
-  const [rooms, setRooms] = useState([
-    {
-      name: "living room",
-      image: "../images/minh-pham-living-room.jpg",
-      roomSensors: [1, 2]
-    },
-    {
-      name: "garage",
-      image: "../images/tyler-nix-garage.jpg",
-      roomSensors: [3, 4] 
-    }
-  ])
   const [loading, setLoading]  = useState(true)
   const [readings, setReadings] = useState([{
     time: "",
@@ -45,6 +33,19 @@ const Dashboard = (props: Props) => {
     createdAt: "",
     units: ""
   }])
+  const [rooms, setRooms] = useState([
+    {
+      name: "living room",
+      image: "../images/minh-pham-living-room.jpg",
+      roomSensors: [1, 2]
+    },
+    {
+      name: "garage",
+      image: "../images/tyler-nix-garage.jpg",
+      roomSensors: [3, 4] 
+    }
+  ])
+  const [currentUnit, setCurrentUnit] = useState("celsius")
 
   useEffect(() => {
     // Fetch request for readings
@@ -73,16 +74,18 @@ const Dashboard = (props: Props) => {
     <div>
       <h1>Current Readings</h1>
 
-      <Units />
+      <Units onChange={(unit:string) => setCurrentUnit(unit)}/>
       <div className="sensors-container">
         {!loading && rooms.map(room => {
           return (
             <SensorIcons
+              key={room.name}
               room={room.name}
               image={room.image}
               roomSensors={room.roomSensors}
               sensors={sensors}
               readings={readings}
+              currentUnit={currentUnit}
             />
           )
         })}
