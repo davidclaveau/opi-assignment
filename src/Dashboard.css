@@ -57,11 +57,22 @@ td {
   padding-left: 8px;
 }
 
+.humidity-padding {
+  padding: 2px 0 2px 0
+}
+
 .graph-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.graph {
+  height: 20em;
+  width: 40em;
+  margin-bottom: 1em;
 }
 
 @media only screen and (max-width: 900px) {

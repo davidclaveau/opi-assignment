@@ -41,8 +41,6 @@ const Sensor = (props: Props) => {
     visibleUnit = " °F"
   }
 
-  console.log("current", props.currentUnit)
-
   return (
     <div className="measurement-items">
       {props.type === "Temperature Sensor" && 
@@ -62,6 +60,8 @@ const Sensor = (props: Props) => {
       
       {typeof visibleTemp === "number" ? Math.round(visibleTemp * 10) / 10 : "None"}
       {visibleTemp === "No readings" ? "" : visibleUnit}
+
+      
     </div>
   )
 }
