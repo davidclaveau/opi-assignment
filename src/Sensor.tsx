@@ -24,7 +24,7 @@ const Sensor = (props: Props) => {
     case "Celsius":
       visibleUnit = " °C"
       break;
-    case "Farenheit":
+    case "Fahrenheit":
       visibleUnit = " °F"
       break;
     case "%":
@@ -34,9 +34,9 @@ const Sensor = (props: Props) => {
       break;
   }
 
-  // Check if the current setting is celsius or farenheit, convert temperature
+  // Check if the current setting is celsius or fahrenheit, convert temperature
   // And change visibleUnit to F
-  if (props.currentUnit === "farenheit" && props.units === "Celsius" && typeof props.temperature === "number") {
+  if (props.currentUnit === "fahrenheit" && props.units === "Celsius" && typeof props.temperature === "number") {
     visibleTemp = (props.temperature * 1.8) + 32
     visibleUnit = " °F"
   }

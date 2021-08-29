@@ -72,9 +72,9 @@ const Graph = (props: Props) => {
     () => {
       let graphData: { label: string; data: (number | Date | undefined)[][];}[] = [];
 
-      // Convert units based on celsius or farenheit
+      // Convert units based on celsius or fahrenheit
       const calculateUnits = (value:number, sensorUnits:string) => {
-        if (props.currentUnit === "farenheit" && sensorUnits === "Celsius" && typeof value === "number") {
+        if (props.currentUnit === "fahrenheit" && sensorUnits === "Celsius" && typeof value === "number") {
           const number:number = ((value * 1.8) + 32)
           return number;
         }
