@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import Sensor from './Sensor'
-import Units from './Units'
-import SensorIcons from './SensorIcons'
-import './Dashboard.css'
+import Units from './Units';
+import SensorIcons from './SensorIcons';
+import Graph from './Graph';
+
+import './Dashboard.css';
 
 interface Props {
 
@@ -46,6 +47,7 @@ const Dashboard = (props: Props) => {
     }
   ])
   const [currentUnit, setCurrentUnit] = useState("celsius")
+  const [data, setData] = useState("hello")
 
   useEffect(() => {
     // Fetch request for readings
@@ -86,10 +88,15 @@ const Dashboard = (props: Props) => {
               sensors={sensors}
               readings={readings}
               currentUnit={currentUnit}
+              onChange={(data:string) => {setData(data)}}
             />
           )
         })}
       </div>
+      <div className="graph-container">
+        <Graph data={data}/>
+      </div>
+
 
     </div>
   )
