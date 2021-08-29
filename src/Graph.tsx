@@ -76,7 +76,6 @@ const Graph = (props: Props) => {
       const calculateUnits = (value:number, sensorUnits:string) => {
         if (props.currentUnit === "farenheit" && sensorUnits === "Celsius" && typeof value === "number") {
           const number:number = ((value * 1.8) + 32)
-          console.log("number", number)
           return number;
         }
 
