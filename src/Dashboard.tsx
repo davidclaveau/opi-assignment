@@ -36,18 +36,18 @@ const Dashboard = (props: Props) => {
   }])
   const [rooms, setRooms] = useState([
     {
-      name: "living room",
+      name: "Living Room",
       image: "../images/minh-pham-living-room.jpg",
       roomSensors: [1, 2]
     },
     {
-      name: "garage",
+      name: "Garage",
       image: "../images/tyler-nix-garage.jpg",
       roomSensors: [3, 4] 
     }
   ])
   const [currentUnit, setCurrentUnit] = useState("celsius")
-  const [data, setData] = useState("hello")
+  const [data, setData] = useState("")
 
   useEffect(() => {
     // Fetch request for readings
@@ -94,7 +94,19 @@ const Dashboard = (props: Props) => {
         })}
       </div>
       <div className="graph-container">
-        <Graph data={data}/>
+        {!loading && data && rooms.filter(room => room.name === data).map(room => {
+          return (
+            <Graph
+              key={room.name}
+              data={data}
+              room={room.name}
+              roomSensors={room.roomSensors}
+              sensors={sensors}
+              readings={readings}
+              currentUnit={currentUnit}
+            />
+          )
+        })}
       </div>
 
 
