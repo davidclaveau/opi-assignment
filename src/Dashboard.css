@@ -57,6 +57,13 @@ td {
   padding-left: 8px;
 }
 
+.graph-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 @media only screen and (max-width: 900px) {
   .sensors-container {
     flex-direction: column;

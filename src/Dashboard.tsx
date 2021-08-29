@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Units from './Units';
 import SensorIcons from './SensorIcons';
 import Graph from './Graph';
+import Button from '@material-ui/core/Button';
 
 import './Dashboard.css';
 
@@ -67,10 +68,6 @@ const Dashboard = (props: Props) => {
     })
 
     }, [])
-
-    // Converting string date to UTC human-readable
-    // const newDate1 = new Date("2020-01-01T00:03Z")
-    // newDate1.toUTCString()
     
   return (
     <div>
@@ -98,18 +95,21 @@ const Dashboard = (props: Props) => {
           return (
             <Graph
               key={room.name}
-              data={data}
               room={room.name}
               roomSensors={room.roomSensors}
+              data={data}
               sensors={sensors}
               readings={readings}
               currentUnit={currentUnit}
-            />
-          )
-        })}
+              />
+              )
+            })}
+        {data && 
+          <div>
+            <Button variant="contained" color="primary" disableElevation onClick={() => setData("")}>Close</Button>
+          </div>
+        }
       </div>
-
-
     </div>
   )
 }
