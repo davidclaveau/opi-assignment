@@ -35,7 +35,7 @@ const Dashboard = (props: Props) => {
     createdAt: "",
     units: ""
   }])
-  const [rooms, setRooms] = useState([
+  const [rooms] = useState([
     {
       name: "Living Room",
       image: "../images/minh-pham-living-room.jpg",
@@ -70,9 +70,7 @@ const Dashboard = (props: Props) => {
     }, [])
     
   return (
-    <div>
-      <h1>Current Readings</h1>
-
+    <div className="main-container">
       <Units onChange={(unit:string) => setCurrentUnit(unit)}/>
       <div className="sensors-container">
         {!loading && rooms.map(room => {

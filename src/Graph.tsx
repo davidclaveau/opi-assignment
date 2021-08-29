@@ -5,8 +5,6 @@ import Button from '@material-ui/core/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTemperatureHigh } from '@fortawesome/free-solid-svg-icons';
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 const { Chart } = require('react-charts');
 
 
@@ -41,32 +39,61 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(.5),
   },
+  selected: {
+    backgroundColor: "green"
+  }
 }));
 
 
 const Graph = (props: Props) => {
-  const [unit, setUnit] = useState("Temperature Sensor")
   const classes = useStyles();
+  const [unit, setUnit] = useState("Temperature Sensor")
+  const [tempSelected, setTempSelected] = useState(true)
+  const [humSelected, setHumSelected] = useState(false)
+
+  // Toggle which button is highlighted on click
+  // Material-UI drawback: difficulty adding style that overrides default
+  const buttonClick = (unit:string) => {
+    if (unit === "Temperature Sensor")  {
+      setTempSelected(true)
+      setHumSelected(false)
+    }
+    if (unit === "Humidity Sensor")  {
+      setHumSelected(true)
+      setTempSelected(false)
+    }
+    setUnit(unit)
+  }
 
   // Find the sensors tied to this room, create new array to render Sensor component
   const sensorArray:ISensors[] = currentSensor(props.roomSensors, props.sensors)
 
   const data = useMemo(
     () => {
-      let graphData: { label: string; data: (number | Date)[][];}[] = [];
+      let graphData: { label: string; data: (number | Date | undefined)[][];}[] = [];
+
+      // Convert units based on celsius or farenheit
+      const calculateUnits = (value:number, sensorUnits:string) => {
+        if (props.currentUnit === "farenheit" && sensorUnits === "Celsius" && typeof value === "number") {
+          const number:number = ((value * 1.8) + 32)
+          console.log("number", number)
+          return number;
+        }
+
+        return value;
+      }
       
       // Loop through the room's sensors and find corresponding readings
       // Create the data variable with label and data values
       for (const sensor of sensorArray) {
         const test = props.readings.filter(reading => reading.sensorId === sensor.id && unit === sensor.type)
-        console.log("test", test)
     
         graphData.push({
           label: sensor.name,
           data:
             test.map((reading: { time: string | number | Date; value: number; }) => {
               return (
-                [new Date(reading.time), reading.value] 
+                [new Date(reading.time), calculateUnits(reading.value, sensor.units)] 
               )
             })
         })
@@ -74,7 +101,7 @@ const Graph = (props: Props) => {
 
       return graphData
     },
-    [props.readings, sensorArray, unit]
+    [props.currentUnit, props.readings, sensorArray, unit]
   )
  
   const axes = useMemo(
@@ -89,10 +116,10 @@ const Graph = (props: Props) => {
     <>
       <h2>{props.room}</h2>
       <div className="unit-toggle">
-        <Button className={classes.button} variant="contained" color="primary" disableElevation onClick={() => setUnit("Temperature Sensor")}>
+        <Button className={`${classes.button} ${tempSelected? classes.selected : ""}`} variant="contained" color="primary" disableElevation onClick={() => buttonClick("Temperature Sensor")}>
             <FontAwesomeIcon icon={faTemperatureHigh} size="2x" className="temperature-padding"/>
         </Button>
-        <Button className={classes.button} variant="contained" color="primary" disableElevation onClick={() => setUnit("Humidity Sensor")}>
+        <Button className={`${classes.button} ${humSelected? classes.selected : ""}`} variant="contained" color="primary" disableElevation onClick={() => buttonClick("Humidity Sensor")}>
             <InvertColorsIcon fontSize="medium" className="humidity-padding"/>
         </Button>
       </div>

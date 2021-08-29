@@ -2,13 +2,15 @@ img {
   border-radius: 50%;
   width: 15em;
   height: 15em;  
-  border: 10px;
-  border: #303f9f solid 0.3em;
 }
 
 h1 {
   display: flex;
   justify-content: center;
+}
+
+.main-container {
+  margin: 2em;
 }
 
 .settings-container {
@@ -73,6 +75,14 @@ td {
   height: 20em;
   width: 40em;
   margin-bottom: 1em;
+}
+
+.button {
+  margin: 1em;
+}
+
+.button--selected {
+  background-color: green;
 }
 
 @media only screen and (max-width: 900px) {

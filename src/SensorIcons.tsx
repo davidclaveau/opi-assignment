@@ -46,7 +46,8 @@ const SensorIcons = (props: Props) => {
   return (
     <div>
       <div className="room-title">{props.room}</div>
-      <img src={props.image} alt="Avatar" onClick={() => props.onChange(props.room)}/>    
+      <img src={props.image} alt="Avatar" onClick={() => props.onChange(props.room)}/>  
+      <h4>Current Readings</h4>  
       <div className="measurement-container">  
         {sensorArray.map(sensor => {
           return (
