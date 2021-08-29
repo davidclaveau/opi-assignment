@@ -25,10 +25,6 @@ h1 {
   text-align: center;
 }
 
-.sensors-container {
-  margin: 1em;
-}
-
 .tableClass {
   table-layout : fixed;
   width: 100%;
@@ -62,8 +58,7 @@ td {
 }
 
 @media only screen and (max-width: 900px) {
-  img {
-    width: 8em;
-    height: 8em;  
+  .sensors-container {
+    flex-direction: column;
   }
 }
